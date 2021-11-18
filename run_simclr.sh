@@ -7,18 +7,23 @@
 #SBATCH -e %j.out
 
 DATASET=CIFAR10
-BATCH_SIZE=128
+BATCH_SIZE=384
 LOSS="dclw"
-TEMP=0.1
+TEMP=0.4
+EPOCHS=20
 
 python train.py \
   --batch_size $BATCH_SIZE \
-  --epochs 100 \
+  --epochs $EPOCHS \
   --feature_dim 128 \
   --loss $LOSS \
-  --temperature $TEMP
+  --temperature $TEMP \
+  --rank 0 \
+  --world-size 1 \
+  --multiprocessing-distributed \
+
 
 python test.py \
-  --batch_size 64 \
-  --epochs 100 \
-  --model_path "results/128_${TEMP}_200_${BATCH_SIZE}_100_${LOSS}_model.pth"
+  --batch_size 384 \
+  --epochs 20 \
+  --model_path "results/128_${TEMP}_200_${BATCH_SIZE}_${EPOCHS}_${LOSS}_model.pth"
